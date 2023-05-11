@@ -17,6 +17,7 @@ class TeamResource extends JsonResource
         return [
             'name' => $this->name,
             'leader' => $this->leader->username,
+            'project' => ProjectResource::collection($this->projects)
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Team extends Model
+class Project extends Model
 {
     use HasFactory;
 
@@ -13,21 +13,20 @@ class Team extends Model
 
     protected $fillable = [
         'name',
-        'leader_id'
+        'description',
+        'start_date',
+        'end_date',
+        'project_manager_id',
+        'team_id'
     ];
-
-    public function leader()
+    
+    public function projectManager()
     {
         return $this->belongsTo(Employee::class);
     }
 
-    public function members()
+    public function team()
     {
-        return $this->belongsToMany(Employee::class, 'team_members');
+        return $this->belongsTo(Team::class);
     }
-    public function projects()
-    {
-        return $this->hasMany(Project::class);
-    }
-
 }

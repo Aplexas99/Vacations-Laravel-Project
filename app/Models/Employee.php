@@ -28,5 +28,11 @@ class Employee extends Model
         return $this->belongsToMany(Team::class, 'team_members');
     }
 
+    public function projects()
+    {
+        return $this->hasManyThrough(TeamMember::class, Employee::class, 'id', 'employee_id', 'id', 'id');
+ 
+    }
+
 
 }

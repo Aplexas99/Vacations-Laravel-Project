@@ -19,5 +19,9 @@ class VerifyCsrfToken extends Middleware
         '/roles',
         '/teams/*',
         '/teams',
+        '/projects/*',	
+        '/projects',
+        '/vacationRequests/*',
+        '/vacationRequests',
     ];
 }

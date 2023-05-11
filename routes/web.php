@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TeamController;
 use App\Models\Role;
@@ -26,3 +27,5 @@ Route::get('/', function () {
     Route::resource('roles', RoleController::class);
 
     Route::resource('teams', TeamController::class);
+
+    Route::resource('projects', ProjectController::class);

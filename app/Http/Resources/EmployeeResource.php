@@ -3,9 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\TagResource;
-use App\Http\Resources\IngredientResource;
-use App\Http\Resources\CategoryResource;
 
 class EmployeeResource extends JsonResource
 {
@@ -24,6 +21,7 @@ class EmployeeResource extends JsonResource
             'vacation_days_left' => $this->vacation_days_left,
             'role' => new RoleResource($this->role),
             'teams' => TeamResource::collection($this->teams),
+            'projects' => ProjectResource::collection($this->teams->map->projects->flatten()),
         ];
 
         return $data;
