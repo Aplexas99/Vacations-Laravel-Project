@@ -5,24 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Team extends Model
+class TeamMember extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
-        'leader_id'
+        'team_id',
+        'employee_id'
     ];
 
-    public function leader()
+    public function team()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Team::class);
     }
 
-    public function members()
+    public function employee()
     {
-        return $this->belongsToMany(Employee::class, 'team_members');
+        return $this->belongsTo(Employee::class);
     }
 }

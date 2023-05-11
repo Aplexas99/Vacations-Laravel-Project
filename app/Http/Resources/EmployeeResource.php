@@ -22,7 +22,8 @@ class EmployeeResource extends JsonResource
             'username' => $this->username,
             'vacation_days_used' => $this->vacation_days_used,
             'vacation_days_left' => $this->vacation_days_left,
-            'role' => $this->role->name,
+            'role' => new RoleResource($this->role),
+            'teams' => TeamResource::collection($this->teams),
         ];
 
         return $data;
