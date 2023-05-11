@@ -37,7 +37,7 @@ class VacationRequestController extends Controller
         $vacationRequest->start_date = $request['start_date'];
         $vacationRequest->end_date = $request['end_date'];
         $vacationRequest->status = $request['status'];
-        $vacationRequest->note = $request['note'] ? $request['note'] : '';
+        $vacationRequest->note = $request['note'] ? $request['note'] : null;
 
         $vacationRequest->save();
 
