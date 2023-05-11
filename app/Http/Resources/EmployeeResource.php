@@ -22,6 +22,7 @@ class EmployeeResource extends JsonResource
             'role' => new RoleResource($this->role),
             'teams' => TeamResource::collection($this->teams),
             'projects' => ProjectResource::collection($this->teams->map->projects->flatten()),
+            'vacation_requests' => VacationRequestResource::collection($this->vacationRequests),
         ];
 
         return $data;
