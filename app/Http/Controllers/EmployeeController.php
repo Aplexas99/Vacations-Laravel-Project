@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
@@ -13,8 +14,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        
-        return Employee::all();
+        $employees = Employee::all();
+        return EmployeeResource::collection($employees);
     }
 
     /**
@@ -30,15 +31,26 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
-        //
+        $employee = new Employee();
+        $employee->username = $request['username'] ? $request['username'] : $employee->username;
+        $employee->password = $request['password'] ? $request['password'] : $employee->password;
+        $employee->email = $request['email'] ? $request['email'] : $employee->email;
+        $employee->vacation_days_used = $request['vacation_days_used'] ? $request['vacation_days_used'] : $employee->vacation_days_used;
+        $employee->vacation_days_left = $request['vacation_days_left'] ? $request['vacation_days_left'] : $employee->vacation_days_left;
+        $employee->role_id = $request['role_id'] ? $request['role_id'] : $employee->role_id;
+        
+        $employee->save();
+
+        return new EmployeeResource($employee);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(int $id)
     {
-        return Employee::find($id);
+        $employee = Employee::findOrFail($id);
+        return new EmployeeResource($employee);
     }
 
     /**
@@ -52,16 +64,24 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmployeeRequest $request, Employee $employee)
+    public function update(UpdateEmployeeRequest $request, int $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+        $employee->username = $request['username'] ? $request['username'] : $employee->username;
+        $employee->vacation_days_used = $request['vacation_days_used'] ? $request['vacation_days_used'] : $employee->vacation_days_used;
+        $employee->vacation_days_left = $request['vacation_days_left'] ? $request['vacation_days_left'] : $employee->vacation_days_left;
+
+        $employee->save();
+        return new EmployeeResource($employee);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+        $employee->delete();
+        return new EmployeeResource($employee);
     }
 }
