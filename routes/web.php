@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\RoleController;
+use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,8 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+    Route::resource('employees', EmployeeController::class);
 
-Route::get("employees", [EmployeeController::class, 'index']);
-Route::get("employees/{id}", [EmployeeController::class, 'show']);
-Route::post("employees", [EmployeeController::class, 'store']);
-
+    Route::resource('roles', RoleController::class);

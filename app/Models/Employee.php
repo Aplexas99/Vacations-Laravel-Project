@@ -16,52 +16,16 @@ class Employee extends Model
         'password',
         'role_id',
         'email',
+        'vacation_days_used',
+        'vacation_days_left',
     ];
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
-
-    /*
-    protected function id(): Attribute
+    public function teams()
     {
-        return Attribute::make(
-            get: fn (string $value) => $value,
-            set: fn (string $value) => $value,
-        );
+        return $this->belongsToMany(Team::class);
     }
-    protected function username(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => $value,
-            set: fn (string $value) => $value,
-        );
-    }
-
-    protected function email(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => $value,
-            set: fn (string $value) => $value,
-        );
-    }
-
-    protected function password(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => $value,
-            set: fn (string $value) => $value,
-        );
-    }
-
-    protected function role_id(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => $value,
-            set: fn (string $value) => $value,
-        );
-    }
-*/
-
 
 }
