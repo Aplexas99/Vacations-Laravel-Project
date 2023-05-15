@@ -50,13 +50,13 @@ body {
     color: #777;
 }
 
-.vacation-section {
+.sections {
     padding: 80px 35px;
 }
+
 .list-group.vacation-requests {
     max-height: 700px;
     overflow-y: auto;
-
 }
 
 .list-group-item {

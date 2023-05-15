@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
@@ -19,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [EmployeeController::class, 'home'])->name('home');
+
+Route::get('/vacation-requests', [EmployeeController::class, 'vacationRequests'])->name('vacationRequests');
 Route::get('/my-teams', [EmployeeController::class, 'myTeams'])->name('myTeams');
 
 
@@ -34,3 +36,9 @@ Route::get('/my-teams', [EmployeeController::class, 'myTeams'])->name('myTeams')
     Route::resource('vacationRequests', VacationRequestController::class);
 
     Route::resource('vacationRequestApprovers', VacationRequestApproversController::class);
+
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/', [LoginController::class, 'showLoginForm']);
+Route::post('login', [LoginController::class, 'login'])->name('loginSubmit');
+
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');

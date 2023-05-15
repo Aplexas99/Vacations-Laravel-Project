@@ -6,6 +6,7 @@ use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
@@ -85,18 +86,21 @@ class EmployeeController extends Controller
         return new EmployeeResource($employee);
     }
 
-    public function home()
+    public function vacationRequests()
     {
-        $employee = Employee::findOrFail(13);
+        $employee = session('employee');
+        
         $vacationRequests = $employee->vacationRequests;
+        
+;
 
-        return view('employee/home', compact('vacationRequests'));
+        return view('employee/home', compact('vacationRequests', 'employee'));
     }
 
     public function myTeams(){
-        $employee = Employee::findOrFail(13);
+        $employee = Employee::findOrFail(2);
         $teams = $employee->teams;
 
-        return view('employee/teams', compact('teams'));
+        return view('employee/my-teams', compact('teams'));
     }
 }
