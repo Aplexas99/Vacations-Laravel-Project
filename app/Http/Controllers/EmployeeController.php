@@ -98,9 +98,15 @@ class EmployeeController extends Controller
     }
 
     public function myTeams(){
-        $employee = Employee::findOrFail(2);
+        $employee = session('employee');
         $teams = $employee->teams;
 
-        return view('employee/my-teams', compact('teams'));
+        return view('employee/my-teams', compact('teams', 'employee'));
+    }
+
+    public function isProjectManager()
+    {
+        $employee = session('employee');
+        return $employee->isProjectManager();
     }
 }

@@ -5,16 +5,18 @@
                     <p>Vacation days left: <span class="vacation-days">{{$employee->vacation_days_left}}</span></p>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">My Teams</a>
+                            <a class="nav-link" href="../my-teams">My Teams</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">My projects</a>
+                            <a class="nav-link" href="../my-projects">My projects</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">My vacations</a>
+                            <a class="nav-link" href="../vacation-requests">My vacations</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="#">Vacation requests</a>
+                            @if($employee->isProjectManager())
+                                <a class="nav-link" href="/pm-vacation-requests">Vacation requests</a>
+                            @endif
                         </li>
                     </ul>
                 </div>

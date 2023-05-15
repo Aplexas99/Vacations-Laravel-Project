@@ -2,13 +2,12 @@
 
 @extends('app')
     @section('content')
-        @include('navbar')
         <div class="container">
             <div class="row">
-                <div class="col-md-3 " style="padding-left: 0px">
+                <div class="col-md-4 " style="padding-left: 0px">
                 @include('employee/employee-section')
                 </div>
-                <div class="col-md-9 sections">
+                <div class="col-md-8 sections">
                 @include('employee/my-teams-section')
                 </div>
             </div>

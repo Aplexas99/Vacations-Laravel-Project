@@ -26,15 +26,10 @@ Route::get('/my-teams', [EmployeeController::class, 'myTeams'])->name('myTeams')
 
 
     Route::resource('employees', EmployeeController::class);
-
     Route::resource('roles', RoleController::class);
-
     Route::resource('teams', TeamController::class);
-
     Route::resource('projects', ProjectController::class);
-
     Route::resource('vacationRequests', VacationRequestController::class);
-
     Route::resource('vacationRequestApprovers', VacationRequestApproversController::class);
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -42,3 +37,5 @@ Route::get('/', [LoginController::class, 'showLoginForm']);
 Route::post('login', [LoginController::class, 'login'])->name('loginSubmit');
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/pm',[EmployeeController::class, 'isProjectManager'])->name('pm');

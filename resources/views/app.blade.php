@@ -22,6 +22,7 @@
     </head>
     <body class="antialiased">    
         <div id="app">
+            @include('navbar')
             @yield('content')
         </div>
     </body>
