@@ -84,4 +84,19 @@ class EmployeeController extends Controller
         $employee->delete();
         return new EmployeeResource($employee);
     }
+
+    public function home()
+    {
+        $employee = Employee::findOrFail(13);
+        $vacationRequests = $employee->vacationRequests;
+
+        return view('employee/home', compact('vacationRequests'));
+    }
+
+    public function myTeams(){
+        $employee = Employee::findOrFail(13);
+        $teams = $employee->teams;
+
+        return view('employee/teams', compact('teams'));
+    }
 }

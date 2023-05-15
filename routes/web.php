@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [EmployeeController::class, 'home'])->name('home');
+Route::get('/my-teams', [EmployeeController::class, 'myTeams'])->name('myTeams');
+
 
     Route::resource('employees', EmployeeController::class);
 
