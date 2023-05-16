@@ -23,7 +23,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/vacation-requests', [EmployeeController::class, 'vacationRequests'])->name('vacationRequests');
 Route::get('/my-teams', [EmployeeController::class, 'myTeams'])->name('myTeams');
+Route::get('/my-projects', [EmployeeController::class, 'myProjects'])->name('myProjects');
 
+Route::get('/vacation-requests/{id}', [VacationRequestController::class, 'showVacationInfo'])->name('vacationRequests.showVacationInfo');
 
     Route::resource('employees', EmployeeController::class);
     Route::resource('roles', RoleController::class);
@@ -37,5 +39,3 @@ Route::get('/', [LoginController::class, 'showLoginForm']);
 Route::post('login', [LoginController::class, 'login'])->name('loginSubmit');
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-
-Route::get('/pm',[EmployeeController::class, 'isProjectManager'])->name('pm');

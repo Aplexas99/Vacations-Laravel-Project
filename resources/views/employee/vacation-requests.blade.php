@@ -4,9 +4,9 @@
                 <div class="list-group vacation-requests">
                     @if(count($vacationRequests) > 0)
                     @foreach($vacationRequests as $vacationRequest)
-                    <div class="list-group-item">
-                        <div class="request-info">
-                            <h5 class="request-user">{{$vacationRequest->employee->username}}</h5>
+                    <a href="{{ route('vacationRequests.showVacationInfo', $vacationRequest->id) }}" class="list-group-item">
+                        <div class="item-info">
+                            <h5 class="item-header">{{$vacationRequest->employee->username}}</h5>
                             <p>Start Date: <span class="start-date">{{$vacationRequest->start_date}}</span></p>
                             <p>End Date: <span class="end-date">{{$vacationRequest->end_date}}</span></p>
                         </div>
@@ -17,7 +17,7 @@
                         @else
                         <span class="status-indicator bg-danger"></span>
                         @endif
-                    </div>
+                    </a>
                     @endforeach
                     @else
                         <p>You have no vacation requests</p>

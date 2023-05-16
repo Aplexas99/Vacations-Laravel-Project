@@ -104,6 +104,12 @@ class EmployeeController extends Controller
         return view('employee/my-teams', compact('teams', 'employee'));
     }
 
+    public function myProjects(){
+        $employee = session('employee');
+        $projects = $employee->projects();
+
+        return view('employee/my-projects', compact('projects', 'employee'));
+    }
     public function isProjectManager()
     {
         $employee = session('employee');

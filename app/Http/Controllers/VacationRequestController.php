@@ -6,6 +6,7 @@ use App\Http\Resources\VacationRequestResource;
 use App\Models\VacationRequest;
 use App\Http\Requests\StoreVacationRequestRequest;
 use App\Http\Requests\UpdateVacationRequestRequest;
+use Carbon\Carbon;
 
 class VacationRequestController extends Controller
 {
@@ -83,5 +84,17 @@ class VacationRequestController extends Controller
     {
         $vacationRequest->delete();
         return new VacationRequestResource($vacationRequest);
+    }
+
+    public function showVacationInfo(int $vacation)
+    {
+        $employee = session('employee');
+        $vacation = VacationRequest::find($vacation);
+        
+        $vacation->approvedBy = $vacation->getApprovers($vacation);
+        $vacation->rejectedBy = $vacation->getRejectors($vacation);
+
+        $vacation->duration = $vacation->getDurationAttribute();
+        return view('employee.vacation-info', compact('vacation', 'employee'));
     }
 }

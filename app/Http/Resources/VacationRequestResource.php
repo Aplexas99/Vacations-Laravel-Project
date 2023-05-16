@@ -21,6 +21,7 @@ class VacationRequestResource extends JsonResource
             'end_date' => $this->end_date,
             'status' => $this->status,
             'created_at' => $this->created_at,
+            'note' => $this->note,
         ];
     }
 }
