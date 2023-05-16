@@ -81,4 +81,12 @@ class TeamController extends Controller
 
         return new TeamResource($team);
     }
+    
+    public function showTeamInfo(int $id)
+    {
+        $employee = session('employee');
+        $team = Team::findOrFail($id);
+
+        return view('employee.my-team-info', compact('team', 'employee'));
+    }
 }

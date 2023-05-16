@@ -88,4 +88,11 @@ class ProjectController extends Controller
 
         return new ProjectResource($project);
     }
+
+    public function showProjectInfo(int $projectId)
+    {
+        $employee = session('employee');
+        $project = Project::find($projectId);
+        return view('employee.my-project-info',compact('project','employee'));
+    }
 }

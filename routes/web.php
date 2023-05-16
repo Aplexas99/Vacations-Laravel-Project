@@ -26,6 +26,11 @@ Route::get('/my-teams', [EmployeeController::class, 'myTeams'])->name('myTeams')
 Route::get('/my-projects', [EmployeeController::class, 'myProjects'])->name('myProjects');
 
 Route::get('/vacation-requests/{id}', [VacationRequestController::class, 'showVacationInfo'])->name('vacationRequests.showVacationInfo');
+Route::get('/vacation-requests-add', [VacationRequestController::class, 'showAddVacationRequest'])->name('vacationRequests.add');
+
+Route::get('/my-projects/{id}', [ProjectController::class, 'showProjectInfo'])->name('myProjects.showProjectInfo');
+
+Route::get('/my-teams/{id}', [TeamController::class, 'showTeamInfo'])->name('myTeams.showTeamInfo');
 
     Route::resource('employees', EmployeeController::class);
     Route::resource('roles', RoleController::class);

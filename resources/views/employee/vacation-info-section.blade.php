@@ -1,6 +1,6 @@
 <h2>Vacation request info</h2>
 <br>
-<div class="list-group projects">
+<div class="list-group">
         <h4>Start Date: {{$vacation->start_date}}</h4>
         <h4>End Date: {{$vacation->end_date}}</h4>
         <h4>Duration: {{$vacation->duration}} days</h4>

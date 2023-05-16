@@ -37,7 +37,7 @@ class VacationRequestController extends Controller
         $vacationRequest->employee_id = $request['employee_id'];
         $vacationRequest->start_date = $request['start_date'];
         $vacationRequest->end_date = $request['end_date'];
-        $vacationRequest->status = $request['status'];
+        $vacationRequest->status = "PENDING";
         $vacationRequest->note = $request['note'] ? $request['note'] : null;
 
         $vacationRequest->save();
@@ -96,5 +96,11 @@ class VacationRequestController extends Controller
 
         $vacation->duration = $vacation->getDurationAttribute();
         return view('employee.vacation-info', compact('vacation', 'employee'));
+    }
+
+    public function showAddVacationRequest()
+    {
+        $employee = session('employee');
+        return view('employee.add-vacation-request', compact('employee'));
     }
 }

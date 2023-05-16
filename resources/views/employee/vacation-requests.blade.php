@@ -21,5 +21,11 @@
                     @endforeach
                     @else
                         <p>You have no vacation requests</p>
-                    @endif
+                    @endif 
+
                 </div>
+                <br>
+                <br>
+                <a type="button" class="btn btn-success btn-xl btn-circle" href="{{ url('vacation-requests-add') }}">+</a>
+
+           
