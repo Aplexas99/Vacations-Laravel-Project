@@ -2,20 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\VacationRequestApproversRepository;
 use App\Http\Resources\VacationRequestApproversResource;
+use App\Http\Resources\VacationRequestResource;
+use App\Models\Employee;
 use App\Models\VacationRequestApprovers;
 use App\Http\Requests\StoreVacationRequestApproversRequest;
 use App\Http\Requests\UpdateVacationRequestApproversRequest;
 
 class VacationRequestApproversController extends Controller
 {
+
+    public function __construct(private VacationRequestApproversRepository $vacationRequestApproversRepository)
+    {
+    }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $approvers = VacationRequestApprovers::all();
-        return VacationRequestApproversResource::collection($approvers);
+        $vacationRequestApprovers = $this->vacationRequestApproversRepository->getAll();
+        return VacationRequestApproversResource::collection($vacationRequestApprovers);
     }
 
     /**
@@ -31,26 +39,15 @@ class VacationRequestApproversController extends Controller
      */
     public function store(StoreVacationRequestApproversRequest $request)
     {
-        $approver = new VacationRequestApprovers();
-
-        $approver->vacation_request_id = $request['vacation_request_id'];
-        $approver->approver_id = $request['approver_id'];
-        $approver->status = $request['status'];
-        $approver->reason = $request['reason'];
-        $approver->created_at = $request['created_at'];
-        $approver->updated_at = $request['updated_at'];
-
-        $approver->save();
-
-        return new VacationRequestApproversResource($approver);
+        $vacationRequestApprovers = $this->vacationRequestApproversRepository->create($request->validated());
+        return new VacationRequestApproversResource($vacationRequestApprovers);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(VacationRequestApprovers $vacationRequestApprovers)
     {
-        $vacationRequestApprovers = VacationRequestApprovers::findOrFail($id);
         return new VacationRequestApproversResource($vacationRequestApprovers);
     }
 
@@ -65,30 +62,28 @@ class VacationRequestApproversController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateVacationRequestApproversRequest $request, int $id)
+    public function update(UpdateVacationRequestApproversRequest $request, VacationRequestApprovers $vacationRequestApprovers)
     {
-        $vacationRequestApprovers = VacationRequestApprovers::findOrFail($id);
-        $vacationRequestApprovers->vacation_request_id = $request['vacation_request_id'] ? $request['vacation_request_id'] : $vacationRequestApprovers->vacation_request_id;
-        $vacationRequestApprovers->approver_id = $request['approver_id'] ? $request['approver_id'] : $vacationRequestApprovers->approver_id;
-        $vacationRequestApprovers->status = $request['status'] ? $request['status'] : $vacationRequestApprovers->status;
-        $vacationRequestApprovers->reason = $request['reason'] ? $request['reason'] : $vacationRequestApprovers->reason;
-        $vacationRequestApprovers->created_at = $request['created_at'] ? $request['created_at'] : $vacationRequestApprovers->created_at;
-        $vacationRequestApprovers->updated_at = $request['updated_at'] ? $request['updated_at'] : $vacationRequestApprovers->updated_at;
-
-        $vacationRequestApprovers->save();
-
+        $vacationRequestApprovers = $this->vacationRequestApproversRepository->update($request->validated(), $vacationRequestApprovers);
         return new VacationRequestApproversResource($vacationRequestApprovers);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(VacationRequestApprovers $vacationRequestApprovers)
     {
-        $vacationRequestApprovers = VacationRequestApprovers::findOrFail($id);
-        $vacationRequestApprovers->delete();
+        $this->vacationRequestApproversRepository->delete($vacationRequestApprovers);
+        return response()->noContent();
+    }
+    
+    public function showVacationRequests()
+    {
+        $employee = session('employee');
+        $employee = Employee::find($employee->id);
+        $vacationRequestsToApprove = $this->vacationRequestApproversRepository->getPendingVacationRequestsByApprover($employee->id);
+        $completedVacationRequests = $this->vacationRequestApproversRepository->getCompletedVacationRequestsByApprover($employee->id);
 
-        
-        return new VacationRequestApproversResource($vacationRequestApprovers);
+        return view('project-manager.vacation-requests', compact('vacationRequestsToApprove', 'completedVacationRequests', 'employee'));
     }
 }

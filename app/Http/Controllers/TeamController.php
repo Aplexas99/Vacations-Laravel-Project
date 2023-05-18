@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\TeamRepository;
 use App\Http\Resources\TeamResource;
 use App\Models\Team;
 use App\Http\Requests\StoreTeamRequest;
@@ -9,12 +10,16 @@ use App\Http\Requests\UpdateTeamRequest;
 
 class TeamController extends Controller
 {
+
+    public function __construct(private TeamRepository $teamRepository)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $teams = Team::all();
+        $teams = $this->teamRepository->getAll();
         return TeamResource::collection($teams);
     }
 
@@ -45,7 +50,7 @@ class TeamController extends Controller
      */
     public function show(int $id)
     {
-        $team = Team::findOrFail($id);
+        $team = $this->teamRepository->find($id);
         return new TeamResource($team);
     }
 
@@ -62,12 +67,7 @@ class TeamController extends Controller
      */
     public function update(UpdateTeamRequest $request, int $id)
     {
-        $team = Team::findOrFail($id);
-        $team->name = $request['name'] ? $request['name'] : $team->name;
-        $team->leader_id = $request['leader_id'] ? $request['leader_id'] : $team->leader_id;
-        
-        $team->save();
-
+        $team = $this->teamRepository->update($request->validated(), $id);
         return new TeamResource($team);
     }
 
@@ -76,9 +76,7 @@ class TeamController extends Controller
      */
     public function destroy(int $id)
     {
-        $team = Team::findOrFail($id);
-        $team->delete();
-
+        $team = $this->teamRepository->delete($id);
         return new TeamResource($team);
     }
     

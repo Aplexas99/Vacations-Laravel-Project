@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\EmployeeController;
+use App\Http\Repositories\VacationRequestRepository;
 use App\Http\Resources\VacationRequestResource;
+use App\Models\Employee;
 use App\Models\VacationRequest;
 use App\Http\Requests\StoreVacationRequestRequest;
 use App\Http\Requests\UpdateVacationRequestRequest;
-use Carbon\Carbon;
 
 class VacationRequestController extends Controller
 {
+
+    public function __construct(private VacationRequestRepository $vacationRequestRepository)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $vacationRequests = VacationRequest::all();
+        $vacationRequests = $this->vacationRequestRepository->getAll();        
+
         return VacationRequestResource::collection($vacationRequests);
     }
 
@@ -32,17 +39,10 @@ class VacationRequestController extends Controller
      */
     public function store(StoreVacationRequestRequest $request)
     {
-        $vacationRequest = new VacationRequest();
-
-        $vacationRequest->employee_id = $request['employee_id'];
-        $vacationRequest->start_date = $request['start_date'];
-        $vacationRequest->end_date = $request['end_date'];
-        $vacationRequest->status = "PENDING";
-        $vacationRequest->note = $request['note'] ? $request['note'] : null;
-
-        $vacationRequest->save();
-
-        return new VacationRequestResource($vacationRequest);
+        $vacationRequest = $this->vacationRequestRepository->create($request->validated());
+        $employee = Employee::find(session('employee')->id);
+        $vacationRequests = $employee->vacationRequests;
+        return view('employee.home', compact('vacationRequests','employee'));
     }
 
     /**
@@ -66,14 +66,7 @@ class VacationRequestController extends Controller
      */
     public function update(UpdateVacationRequestRequest $request, VacationRequest $vacationRequest)
     {
-        $vacationRequest->employee_id = $request['employee_id'] ? $request['employee_id'] : $vacationRequest->employee_id;
-        $vacationRequest->start_date = $request['start_date'] ? $request['start_date'] : $vacationRequest->start_date;
-        $vacationRequest->end_date = $request['end_date'] ? $request['end_date'] : $vacationRequest->end_date;
-        $vacationRequest->status = $request['status'] ? $request['status'] : $vacationRequest->status;
-        $vacationRequest->note = $request['note'] ? $request['note'] : $vacationRequest->note;
-
-        $vacationRequest->save();
-
+        $vacationRequest = $this->vacationRequestRepository->update($vacationRequest->id, $request->validated());
         return new VacationRequestResource($vacationRequest);
     }
 
@@ -89,8 +82,8 @@ class VacationRequestController extends Controller
     public function showVacationInfo(int $vacation)
     {
         $employee = session('employee');
-        $vacation = VacationRequest::find($vacation);
-        
+        $vacation = VacationRequest::find($vacation);        
+        $vacation->updateStatus();
         $vacation->approvedBy = $vacation->getApprovers($vacation);
         $vacation->rejectedBy = $vacation->getRejectors($vacation);
 
@@ -101,6 +94,7 @@ class VacationRequestController extends Controller
     public function showAddVacationRequest()
     {
         $employee = session('employee');
+        $employee = Employee::find($employee->id);
         return view('employee.add-vacation-request', compact('employee'));
     }
 }

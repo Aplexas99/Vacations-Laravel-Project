@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\RoleRepository;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
@@ -11,12 +12,16 @@ use App\Models\Role;
 class RoleController extends Controller
 {
 
+    public function __construct(private RoleRepository $roleRepository)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $roles = Role::all();
+        $roles = $this->roleRepository->getAll();
         return RoleResource::collection($roles);
     }
 
@@ -33,11 +38,7 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        $role = new Role();
-        $role->name = $request['name'];
-        
-        $role->save();
-
+        $role = $this->roleRepository->create($request->validated());
         return new RoleResource($role);
     }
 
@@ -46,7 +47,7 @@ class RoleController extends Controller
      */
     public function show(int $id)
     {
-        $role = Role::findOrFail($id);
+        $role = $this->roleRepository->find($id);
         return new RoleResource($role);
     }
 
@@ -63,11 +64,7 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, int $id)
     {
-        $role = Role::findOrFail($id);
-        $role->name = $request['name'] ? $request['name'] : $role->name;
-        
-        $role->save();
-
+        $role = $this->roleRepository->update($request->validated(), $id);
         return new RoleResource($role);
     }
 
@@ -76,9 +73,7 @@ class RoleController extends Controller
      */
     public function destroy(int $id)
     {
-        $role = Role::findOrFail($id);
-        $role->delete();
-
+        $role = $this->roleRepository->delete($id);
         return new RoleResource($role);
     }
 }

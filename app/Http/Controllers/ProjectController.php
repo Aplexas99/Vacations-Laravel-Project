@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\ProjectRepository;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
@@ -9,12 +10,16 @@ use App\Http\Requests\UpdateProjectRequest;
 
 class ProjectController extends Controller
 {
+
+    public function __construct(private ProjectRepository $projectRepository)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $projects = Project::all();
+        $projects = $this->projectRepository->getAll();
         return ProjectResource::collection($projects);
     }
 
@@ -31,17 +36,7 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $project = new Project();
-
-        $project->name = $request['name'];
-        $project->project_manager_id = $request['project_manager_id'];
-        $project->team_id = $request['team_id'];
-        $project->start_date = $request['start_date'];
-        $project->end_date = $request['end_date'];
-        $project->description = $request['description'];
-        
-        $project->save();
-
+        $project = $this->projectRepository->create($request->validated());
         return new ProjectResource($project);
     }
 
@@ -66,15 +61,7 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $project->name = $request['name'] ? $request['name'] : $project->name;
-        $project->project_manager_id = $request['project_manager_id'] ? $request['project_manager_id'] : $project->project_manager_id;
-        $project->team_id = $request['team_id'] ? $request['team_id'] : $project->team_id;
-        $project->start_date = $request['start_date'] ? $request['start_date'] : $project->start_date;
-        $project->end_date = $request['end_date'] ? $request['end_date'] : $project->end_date;
-        $project->description = $request['description'] ? $request['description'] : $project->description;
-        
-        $project->save();
-
+        $project = $this->projectRepository->update($request->validated(), $project);
         return new ProjectResource($project);
     }
 
@@ -83,9 +70,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-
-        $project->delete();
-
+        $project = $this->projectRepository->delete($project);
         return new ProjectResource($project);
     }
 
