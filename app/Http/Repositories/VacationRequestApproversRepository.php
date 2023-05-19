@@ -78,4 +78,20 @@ class VacationRequestApproversRepository implements VacationRequestApproversRepo
 
         return $vacation_requests;
     }
+
+    public function approveVacationRequest($id){
+        $vacation_request_approver = VacationRequestApprovers::find($id);
+        $vacation_request_approver->status = 'ACCEPTED';
+        $vacation_request_approver->save();
+        $vacation_request_approver->vacationRequest->updateStatus();
+        return $vacation_request_approver;
+    }
+
+    public function rejectVacationRequest($id){
+        $vacation_request_approver = VacationRequestApprovers::find($id);
+        $vacation_request_approver->status = 'REJECTED';
+        $vacation_request_approver->save();
+        $vacation_request_approver->vacationRequest->updateStatus();
+        return $vacation_request_approver;
+    }
 }

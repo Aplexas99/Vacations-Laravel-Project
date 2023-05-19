@@ -26,8 +26,9 @@ class StoreEmployeeRequest extends FormRequest
             'password' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email',
             'vacation_days_used' => 'required|integer|between:0,20',
-            'vacation_days_left' => 'required|integer|between:0,20',
+            'vacation_days_left' => 'nullable|integer|between:0,20',
             'role_id' => 'required|integer|exists:roles,id',
+            'team_id' => 'nullable|integer|exists:teams,id',
         ];
     }
 }

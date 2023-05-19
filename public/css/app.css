@@ -19,6 +19,7 @@ body {
 
 .row{
     height: 100%;
+    overflow: hidden;
 }
 
 .user-section {
@@ -57,14 +58,24 @@ body {
 }
 
 .list-group{
-    max-height: 700px;
-    overflow-y: auto;
+    max-height: 500px;
+    overflow-y: overlay;
+    margin: 15px 0px;
 }
 
+.list-group .small{
+    height: 350px;
+    overflow-y: overlay;
+}
+.list-group .project-manager{
+    max-height: 350px;
+    overflow-y: overlay;
+}
 .list-group-item {
     position: relative;
     display: flex;
     align-items: center;
+    font-size: 14px;
 }
 
 .item-info {
@@ -95,6 +106,7 @@ body {
     border-radius: 50%;
     position: absolute;
     right: 10px;
+    margin-right: 25px;
 }
 
 .btn-circle {
@@ -103,5 +115,19 @@ body {
 }
 
 .list-group input{
-    width: 100px;
+    width: fit-content;
+}
+
+.btn-submit{
+    width: fit-content;
+}
+
+.btn-delete-member{
+    width: 24px;
+    height: 24px;
+}
+
+textarea{
+    width: -webkit-fill-available;
+    margin-right: 20px;
 }

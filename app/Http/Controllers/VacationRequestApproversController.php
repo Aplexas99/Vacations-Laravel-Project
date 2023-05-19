@@ -86,4 +86,22 @@ class VacationRequestApproversController extends Controller
 
         return view('project-manager.vacation-requests', compact('vacationRequestsToApprove', 'completedVacationRequests', 'employee'));
     }
+
+    public function approveVacationRequest($id)
+    {
+        $employee = session('employee');
+        $employee = Employee::find($employee->id);
+        
+        $this->vacationRequestApproversRepository->approveVacationRequest($id);
+        return redirect()->route('vacationRequestApprovers.showVacationRequests');
+    }
+
+    public function rejectVacationRequest($id){
+        $employee = session('employee');
+        $employee = Employee::find($employee->id);
+        
+        $this->vacationRequestApproversRepository->rejectVacationRequest($id);
+        return redirect()->route('vacationRequestApprovers.showVacationRequests');
+    }
+
 }

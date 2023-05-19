@@ -22,12 +22,12 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:255|unique:projects',
-            'description' => 'string|nullable',
-            'start_date' => 'date',
-            'end_date' => 'date',
-            'project_manager_id' => 'integer|exists:employees,id',
+            'name' => 'string|max:255|unique:projects,name,' . $this->route('id'),
+            'description' => 'string|max:255',
             'team_id' => 'integer|exists:teams,id',
+            'start_date' => 'date|before:end_date',
+            'end_date' => 'date|after:start_date',
+            'project_manager_id' => 'integer|exists:employees,id'
         ];
     }
 }

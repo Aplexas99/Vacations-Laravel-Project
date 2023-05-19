@@ -31,8 +31,13 @@ class LoginController extends Controller
         $employee = Employee::where('email', $email)->where('password', $password)->first();
 
         if ($employee) {
-            session(['employee' => $employee]);
-            return redirect()->route('vacationRequests');
+            if($employee->role->name =='Admin'){
+                session(['employee' => $employee]);
+                return redirect()->route('admin.vacationRequests.showAll');
+            }else{
+                session(['employee' => $employee]);
+                return redirect()->route('vacationRequests',$employee->id);
+            }
         } else {
             return redirect()->route('login')->with('error', 'Invalid credentials');
         }

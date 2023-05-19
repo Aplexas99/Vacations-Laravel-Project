@@ -82,12 +82,17 @@ class VacationRequestController extends Controller
     public function showVacationInfo(int $vacation)
     {
         $employee = session('employee');
+        $employee = Employee::find($employee->id);
         $vacation = VacationRequest::find($vacation);        
         $vacation->updateStatus();
         $vacation->approvedBy = $vacation->getApprovers($vacation);
         $vacation->rejectedBy = $vacation->getRejectors($vacation);
 
         $vacation->duration = $vacation->getDurationAttribute();
+
+        if($employee->role->name == 'Admin'){
+            return view('admin.vacation-info', compact('vacation'));
+        }
         return view('employee.vacation-info', compact('vacation', 'employee'));
     }
 
@@ -96,5 +101,36 @@ class VacationRequestController extends Controller
         $employee = session('employee');
         $employee = Employee::find($employee->id);
         return view('employee.add-vacation-request', compact('employee'));
+    }
+
+    public function addVacationRequest(StoreVacationRequestRequest $request){
+        $employee = session('employee');
+        $employee = Employee::find($employee->id);
+        $vacationRequest = $this->vacationRequestRepository->create($request->validated());
+        $vacationRequests = $employee->vacationRequests;
+        $this->vacationRequestRepository->generateVacationRequestApprovals($vacationRequest->id);
+        var_dump($vacationRequest->id);
+        return view('employee.home', compact('vacationRequests','employee'));
+    }
+    public function showValidateVacationRequest(int $requestId)
+    {
+        $employee = session('employee');
+        $employee = Employee::find($employee->id);
+        $vacationRequest = $this->vacationRequestRepository->find($requestId);
+        return view('project-manager.validate-request-info', compact('employee', 'vacationRequest'));
+    }
+
+    public function showCompletedVacationRequest(int $requestId)
+    {
+        $employee = session('employee');
+        $employee = Employee::find($employee->id);
+        $vacationRequest = $this->vacationRequestRepository->find($requestId);
+        return view('project-manager.completed-request-info', compact('employee', 'vacationRequest'));
+    }
+
+    public function showVacationRequests()
+    {
+        $vacationRequests = $this->vacationRequestRepository->getAll();
+        return view('admin.vacation-requests', compact('vacationRequests'));
     }
 }

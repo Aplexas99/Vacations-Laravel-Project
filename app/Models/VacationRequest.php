@@ -34,7 +34,7 @@ class VacationRequest extends Model
         return $this->belongsTo(Employee::class);
     }
 
-    public function approvers()
+    public function validators()
     {
         return $this->hasMany(VacationRequestApprovers::class, 'vacation_request_id');
     }
@@ -48,21 +48,48 @@ class VacationRequest extends Model
 
     public function getApprovers()
     {
-        $approvals = $this->approvers->where('status', 'approved');
-        foreach ($approvals as $approval) {
-            $approvedBy = $approval->approver->username;
-        }
-        return $approvedBy;
+        $approvals = $this->validators->where('status', 'ACCEPTED');
+
+        return $approvals ?? null;
     }
     
     public function getRejectors()
     {
-        $approvals = $this->approvers->where('status', 'rejected');
-        foreach ($approvals as $approval) {
-            $rejectedBy = $approval->approver->username;
-        }
-        return $rejectedBy;
+        $rejectors = $this->validators->where('status', 'REJECTED');
+        
+        return $rejectors ?? null;
     }
-    
+
+    public function getApproversCount()
+    {
+        $approvals = $this->validators->where('status', 'ACCEPTED');
+        return $approvals->count();
+    }
+
+    public function getRejectorsCount()
+    {
+        $rejectors = $this->validators->where('status', 'REJECTED');
+        return $rejectors->count();
+    }
+    public function updateStatus()
+    {
+        $approvals = $this->validators->where('status', 'ACCEPTED');
+        $rejectors = $this->validators->where('status', 'REJECTED');
+
+        $approvalCount = $approvals->count();
+        $rejectorCount = $rejectors->count();
+        if ($approvalCount === 2) {
+            $this->status = 'ACCEPTED';
+            $employee = Employee::find($this->employee_id);
+            $employee->vacation_days_left -=$this->getDurationAttribute();
+            $employee->save();
+        } elseif ($rejectorCount >= 1) {
+            $this->status = 'REJECTED';
+        } else {
+            $this->status = 'PENDING';
+        }
+
+        $this->save();
+    }
 
 }

@@ -3,7 +3,7 @@
     <br>
                 <div class="list-group vacation-requests">
                     @if(count($vacationRequests) > 0)
-                    @foreach($vacationRequests as $vacationRequest)
+                    @foreach($vacationRequests->sortByDesc('id') as $vacationRequest)
                     <a href="{{ route('vacationRequests.showVacationInfo', $vacationRequest->id) }}" class="list-group-item">
                         <div class="item-info">
                             <h5 class="item-header">{{$vacationRequest->employee->username}}</h5>

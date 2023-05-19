@@ -7,6 +7,8 @@ use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Models\Role;
+use App\Models\Team;
 use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
@@ -98,6 +100,7 @@ class EmployeeController extends Controller
 
     public function myProjects(){
         $employee = session('employee');
+        $employee = Employee::findOrFail($employee->id);
         $projects = $employee->projects();
 
         return view('employee/my-projects', compact('projects', 'employee'));
@@ -108,4 +111,37 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($employee->id);
         return $employee->isProjectManager();
     }
+    
+    public function showEmployees()
+    {
+        $employees = $this->employeeRepository->getAll();
+        return view('admin.all-employees', compact('employees'));
+    }
+
+    public function showEmployeeInfo($id)
+    {
+        $employee = $this->employeeRepository->find($id);
+        return view('admin.employee-info', compact('employee'));
+    }
+
+    public function deleteEmployee($id)
+    {
+        $this->employeeRepository->delete($id);
+        return redirect()->route('admin.employees.showAll');
+    }
+
+    public function showAddEmployee()
+    {
+        $roles = Role::all();
+        $teams = Team::all();
+
+        return view('admin.add-employee-info',compact('roles','teams'));
+    }
+
+    public function addEmployee(StoreEmployeeRequest $request)
+    {
+        $employee = $this->employeeRepository->create($request->validated());
+        return redirect()->route('admin.employees.showAll');
+    }
+
 }

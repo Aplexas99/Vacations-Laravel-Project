@@ -22,9 +22,9 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'string|max:255',
-            'vacation_days_used' => 'integer',
-            'vacation_days_left' => 'integer',
+            'username' => 'string|max:255|unique:employees,username',
+            'vacation_days_used' => 'integer | between:0,20',
+            'vacation_days_left' => 'integer | between:0,20',
         ];
     }
 }

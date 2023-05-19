@@ -76,4 +76,33 @@ class RoleController extends Controller
         $role = $this->roleRepository->delete($id);
         return new RoleResource($role);
     }
+
+    public function showRoles()
+    {
+        $roles = $this->roleRepository->getAll();
+        return view('admin.all-roles', compact('roles'));
+    }
+
+    public function showRoleInfo($id)
+    {
+        $role = $this->roleRepository->find($id);
+        return view('admin.role-info', compact('role'));
+    }
+
+    public function deleteRole($id)
+    {
+        $this->roleRepository->delete($id);
+        return redirect()->route('admin.roles.showAll');
+    }
+
+    public function showAddRole()
+    {
+        return view('admin.add-role-info');
+    }
+
+    public function addRole(StoreRoleRequest $request)
+    {
+        $role = $this->roleRepository->create($request->validated());
+        return redirect()->route('admin.roles.showAll');
+    }
 }

@@ -24,8 +24,8 @@ class ProjectRepository implements ProjectRepositoryInterface {
     {
         $project = new Project();
 
-        $project->name = $data['name'];
-        $project->description = $data['description'];
+        $project->name = $data['name'] ;
+        $project->description = $data['description'] ?? null;
         $project->team_id = $data['team_id'];
         $project->start_date = $data['start_date'];
         $project->end_date = $data['end_date'];
@@ -36,19 +36,20 @@ class ProjectRepository implements ProjectRepositoryInterface {
     }
 
     public function update($id, $data)
-    {
-        $project = Project::find($id);
-        
-        $project->name = $data['name'] ?? $project->name;
-        $project->description = $data['description'] ?? $project->description;
-        $project->team_id = $data['team_id'] ?? $project->team_id;
-        $project->start_date = $data['start_date'] ?? $project->start_date;
-        $project->end_date = $data['end_date'] ?? $project->end_date;
-        $project->project_manager_id = $data['project_manager_id'] ?? $project->project_manager_id;
+{
+    $project = Project::find($id);
 
-        $project->save();
-        return $project;
-    }
+    $project->name = $data['name'] ?? $project->name;
+    $project->description = $data['description'] ?? $project->description;
+    $project->team_id = $data['team_id'] ?? $project->team_id;
+    $project->start_date = $data['start_date'] ?? $project->start_date;
+    $project->end_date = $data['end_date'] ?? $project->end_date;
+    $project->project_manager_id = $data['project_manager_id'] ?? $project->project_manager_id;
+
+    $project->save();
+    return $project;
+}
+
 
     public function delete($id)
     {

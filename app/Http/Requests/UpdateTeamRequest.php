@@ -22,7 +22,8 @@ class UpdateTeamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'string|max:255',
+            'leader_id' => 'integer|exists:employees,id',
         ];
     }
 }

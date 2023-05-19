@@ -31,7 +31,6 @@ class Employee extends Model
     public function projects()
     {
         return $this->teams->map->projects->flatten();
- 
     }
     public function vacationRequests()
     {
@@ -40,10 +39,31 @@ class Employee extends Model
 
     public function isProjectManager()
     {
-        $projects = $this->projects()->where('project_manager_id', $this->id);
-        if ($projects->count() > 0) {
-            return true;
-        }	
-        return false;
+        return $this->role->name === 'Project Manager';
+    }
+
+    public function isTeamLeader()
+    {
+        return $this->role->name === 'Team Leader';
+    }
+
+    public function isAdmin()
+    {
+        return $this->role->name === 'Admin';
+    }
+
+    public function isEmployee()
+    {
+        return $this->role->name === 'Employee';
+    }
+
+    public function promoteToPM(){
+        $this->role_id = 4;
+        $this->save();
+    }
+    
+    public function promoteToTL(){
+        $this->role_id = 5;
+        $this->save();
     }
 }

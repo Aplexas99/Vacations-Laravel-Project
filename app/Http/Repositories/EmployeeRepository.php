@@ -5,6 +5,8 @@ namespace App\Http\Repositories;
 use App\Http\Interfaces\EmployeeRepositoryInterface;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
+use App\Models\Role;
+use App\Models\Team;
 
 
 class EmployeeRepository implements EmployeeRepositoryInterface{
@@ -24,12 +26,12 @@ class EmployeeRepository implements EmployeeRepositoryInterface{
         public function create($data)
         {
             $employee = new Employee();
-            $employee->username = $data['username'] ? $data['username'] : $employee->username;
-            $employee->password = $data['password'] ? $data['password'] : $employee->password;
-            $employee->email = $data['email'] ? $data['email'] : $employee->email;
-            $employee->vacation_days_used = $data['vacation_days_used'] ? $data['vacation_days_used'] : $employee->vacation_days_used;
-            $employee->vacation_days_left = $data['vacation_days_left'] ? $data['vacation_days_left'] : $employee->vacation_days_left;
-            $employee->role_id = $data['role_id'] ? $data['role_id'] : $employee->role_id;
+            $employee->username = $data['username'];
+            $employee->password = $data['password'];
+            $employee->email = $data['email'];
+            $employee->vacation_days_used = $data['vacation_days_used'] ? $data['vacation_days_used'] : 0;
+            $employee->vacation_days_left = $data['vacation_days_left'];
+            $employee->role_id = $data['role_id'];
             
             $employee->save();
     

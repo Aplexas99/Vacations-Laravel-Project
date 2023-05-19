@@ -14,8 +14,8 @@
                             <a class="nav-link" href="../vacation-requests">My vacations</a>
                         </li>
                         <li>
-                            @if($employee->isProjectManager())
-                                <a class="nav-link" href="/pm-vacation-requests">Vacation requests</a>
+                            @if($employee->isProjectManager() || $employee->isTeamLeader())
+                                <a class="nav-link" href="../pm-vacation-requests">Vacation requests</a>
                             @endif
                         </li>
                     </ul>
